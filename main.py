@@ -6,7 +6,7 @@ class Problem(csp.CSP):
     def __init__(self, fh):
         # Place here your code to load problem from opened file object fh and
         stream = fh.read()
-        list = stream.spli()
+        list = stream.split()
 
         position = []
         a = 0
@@ -76,10 +76,13 @@ class Problem(csp.CSP):
 # Place here your code to write solution to opened file object fh
         # solution1=[variables[1],domains[0][1],domains[1][0]]
         # solution2=' '.join(solution1)
+
+
     #def function(self,): function that calls csp.backtraking
 
 def solve(input_file, output_file):
     p = Problem(input_file)
     # Place here your code that calls function csp.backtracking_search(self, ...)
+
     #p.function that calls
     p.dump_solution(output_file)
