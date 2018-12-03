@@ -111,13 +111,20 @@ class Problem(csp.CSP):
         for var in variables:
             domains[var] = TR
 
+        neighbors = {}
+        for w1 in W:
+            for w2 in W:
+                if w1 != w2:
+                    if w2 not in neighbors[w1]:
+                        neighbors[w1].append(w2)
+                    if w1 not in neighbors[w2]:
+                        neighbors[w2].append(w1)
         
-
         def constraints_function(A, a, B, b){
 
         }
 
-    #       super().__init__(variables, domains, graph, constraints_function)
+    #       super().__init__(variables, domains, neighbors, constraints_function)
 
     def dump_solution(self, fh):
 
