@@ -1,16 +1,51 @@
+from collections import namedtuple
+
 import csp
 
 
 class Problem(csp.CSP):
+    Timetable_slot = namedtuple('Timetable_slot', 'date, time')
+    Weekly_class = namedtuple('Weekly_class', 'class, kind, index')
+    Association = namedtuple('Association', 'student, class')
+    Timetable_slot_room = namedtuple('Timetable_slot_room', 'date, time, room')
 
     def __init__(self, fh):
-        # Place here your code to load problem from opened file object fh and
-        stream = fh.read()
-        list = stream.split()
 
-        position = []
+        # Place here your code to load problem from opened file object fh and
+        T, W, A, TR = []
+        for l in fh.readlines():
+            firstChar = l[0]
+            l.split().pop(0)
+            if firstChar == 'T':
+                for elem in l:
+                    elem.split(',')
+                    T.append(self.Timetable_slot(elem[0], elem[1]))
+
+            elif firstChar == 'R':
+                R = l
+            elif firstChar == 'S':
+                S = l
+            elif firstChar == 'W':
+                for elem in l:
+                    elem.split(',')
+                    W.append(self.Weekly_class(elem[0], elem[1], elem[2]))
+            elif firstChar == 'A':
+                for elem in l:
+                    elem.split(',')
+                    A.append(self.Association(elem[0], elem[1]))
+            else:
+                raise ValueError('Invalid file input !')
+
+        for t in T:
+            for r in R:
+                TR.append(self.Timetable_slot_room(t.date, t.time, r))
+
+
+
+
+        """position = []
         a = 0
-        for i in range (len(list)):
+        for i in range(len(list)):
             if len(list[i]) == 1:
                 position.append(i)
                 a += 1
@@ -68,21 +103,35 @@ class Problem(csp.CSP):
                 for t in range(len(types)):
                     if W_tup[w][0] == types[t]:
                         types[S[s]][t] = W_tup[w]
-
+        """
         # set variables, domains, graph, and constraint_function accordingly
-#       super().__init__(variables, domains, graph, constraints_function)
+
+        variables = W
+        domains = {}
+        for var in variables:
+            domains[var] = TR
+
+        
+
+        def constraints_function(A, a, B, b){
+
+        }
+
+    #       super().__init__(variables, domains, graph, constraints_function)
 
     def dump_solution(self, fh):
+
+
 # Place here your code to write solution to opened file object fh
-        # solution1=[variables[1],domains[0][1],domains[1][0]]
-        # solution2=' '.join(solution1)
+# solution1=[variables[1],domains[0][1],domains[1][0]]
+# solution2=' '.join(solution1)
 
 
-    #def function(self,): function that calls csp.backtraking
+# def function(self,): function that calls csp.backtraking
 
 def solve(input_file, output_file):
     p = Problem(input_file)
     # Place here your code that calls function csp.backtracking_search(self, ...)
 
-    #p.function that calls
+    # p.function that calls
     p.dump_solution(output_file)
