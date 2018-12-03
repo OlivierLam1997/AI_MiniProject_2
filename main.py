@@ -6,6 +6,8 @@ class Problem(csp.CSP):
     def __init__(self, fh):
         # Place here your code to load problem from opened file object fh and
         # set variables, domains, graph, and constraint_function accordingly
+
+        
 #       super().__init__(variables, domains, graph, constraints_function)
 
     def dump_solution(self, fh):
