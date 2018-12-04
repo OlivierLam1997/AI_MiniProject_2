@@ -1,5 +1,5 @@
 from collections import namedtuple
-
+from copy import deepcopy
 import csp
 
 
@@ -45,6 +45,8 @@ class Problem(csp.CSP):
             for r in R:
                 TR.append(self.Timetable_slot_room(t.date, t.time, r))
 
+
+
         self.T = T
         self.W = W
         self.Assoc = Assoc
@@ -56,14 +58,21 @@ class Problem(csp.CSP):
             domains[var] = TR
 
         neighbors = {}
-        for w1 in W:
-            for w2 in W:
-                if w1 != w2:
-                    if w2 not in neighbors[w1]:
-                        neighbors[w1].append(w2)
-                    if w1 not in neighbors[w2]:
-                        neighbors[w2].append(w1)
+#        for w1 in W:
+#            for w2 in W:
+#                print(w1)
+#                if w1 != w2:
+#                    if w2 not in neighbors[w1]:
+#                        neighbors[w1].append(w2)
+#                    if w1 not in neighbors[w2]:
+#                        neighbors[w2].append(w1)
 
+        for w in W:
+            W1 = deepcopy(W)
+            W1.remove(w)
+            neighbors[w] = W1
+
+        print(neighbors)
         self.solution = {}
 
         super().__init__(variables, domains, neighbors, self.constraints_function)
