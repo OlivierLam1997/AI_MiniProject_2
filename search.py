@@ -3,14 +3,15 @@
 import bisect
 import collections
 import collections.abc
+import functools
 import heapq
+import math
 import operator
 import os.path
 import random
-import math
-import functools
-import numpy as np
 from itertools import chain, combinations
+
+import numpy as np
 
 
 # ______________________________________________________________________________

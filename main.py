@@ -14,7 +14,6 @@ class Problem(csp.CSP):
         # Place here your code to load problem from opened file object fh and
         T, W, Assoc, TR = []
 
-
         for l in fh.readlines():
             firstChar = l[0]
             l.split().pop(0)
@@ -46,7 +45,6 @@ class Problem(csp.CSP):
         self.W = W
         self.Assoc = Assoc
         self.TR = TR
-
 
         """position = []
         a = 0
@@ -112,7 +110,6 @@ class Problem(csp.CSP):
         # set variables, domains, graph, and constraint_function accordingly
 
         variables = W
-
         domains = {}
         for var in variables:
             domains[var] = TR
@@ -126,11 +123,11 @@ class Problem(csp.CSP):
                     if w1 not in neighbors[w2]:
                         neighbors[w2].append(w1)
 
+        self.solution = {}
 
         super().__init__(variables, domains, neighbors, self.constraints_function)
 
-
-    def constraints_function(self, A, a, B, b) :
+    def constraints_function(self, A, a, B, b):
         firstConstraint, secondConstraint, thirdConstraint = True
 
         if (A != B):
@@ -149,11 +146,16 @@ class Problem(csp.CSP):
         return firstConstraint and secondConstraint and thirdConstraint
 
     def dump_solution(self, fh):
+        for s in self.solution:
+            fh.write(
+                s.c + ',' + s.t + ',' + s.i + ' ' + self.solution[s].d + ',' + self.solution[s].t + ' ' + self.solution[
+                    s].r + '\n')
 
-
-# Place here your code to write solution to opened file object fh
-# solution1=[variables[1],domains[0][1],domains[1][0]]
-# solution2=' '.join(solution1)
+    def cost_function(self):
+        sum = 0
+        for s in self.solution:
+            sum += self.solution[s].time
+        return sum
 
 
 # def function(self,): function that calls csp.backtraking
@@ -162,5 +164,12 @@ def solve(input_file, output_file):
     p = Problem(input_file)
     # Place here your code that calls function csp.backtracking_search(self, ...)
 
+    p.solution = csp.backtracking_search(p, csp.first_unassigned_variable,
+                                         csp.unordered_domain_values,
+                                         csp.no_inference)
     # p.function that calls
     p.dump_solution(output_file)
+
+
+p = Problem(open("input.txt"))
+print(p.variables)

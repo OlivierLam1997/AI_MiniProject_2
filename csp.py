@@ -1,14 +1,13 @@
 """CSP (Constraint Satisfaction Problems) problems and solvers. (Chapter 6)."""
 
-from utils import argmin_random_tie, count, first
-import search
-
+import itertools
+import random
+import re
 from collections import defaultdict
 from functools import reduce
 
-import itertools
-import re
-import random
+import search
+from utils import argmin_random_tie, count, first
 
 
 class CSP(search.Problem):
