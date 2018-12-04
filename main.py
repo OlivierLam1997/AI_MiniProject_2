@@ -19,24 +19,25 @@ class Problem(csp.CSP):
 
         for l in fh.readlines():
             firstChar = l[0]
-            list = l.split()
-            list.pop(0)
+            splited_line = l.split()
+            splited_line.pop(0)
             if firstChar == 'T':
-                for elem in list:
-                    T.append(self.Timetable_slot(elem[0], elem[1]))
+                for elem in splited_line:
+                    splited_elem = elem.split(',')
+                    T.append(self.Timetable_slot(splited_elem[0], splited_elem[1]))
 
             elif firstChar == 'R':
-                R = list
+                R = splited_line
             elif firstChar == 'S':
-                S = list
+                S = splited_line
             elif firstChar == 'W':
-                for elem in list:
-                    elem.split(',')
-                    W.append(self.Weekly_class(elem[0], elem[1], elem[2]))
+                for elem in splited_line:
+                    splited_elem = elem.split(',')
+                    W.append(self.Weekly_class(splited_elem[0], splited_elem[1], splited_elem[2]))
             elif firstChar == 'A':
-                for elem in list:
-                    elem.split(',')
-                    Assoc.append(self.Association(elem[0], elem[1]))
+                for elem in splited_line:
+                    splited_elem = elem.split(',')
+                    Assoc.append(self.Association(splited_elem[0], splited_elem[1]))
             else:
                 raise ValueError('Invalid file input !')
 
@@ -112,4 +113,3 @@ def solve(input_file, output_file):
 
 
 p = Problem(open("input.txt"))
-print(p.variables)
