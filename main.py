@@ -12,26 +12,29 @@ class Problem(csp.CSP):
     def __init__(self, fh):
 
         # Place here your code to load problem from opened file object fh and
-        T, W, Assoc, TR = []
+        T = []
+        W = []
+        Assoc = []
+        TR = []
 
         for l in fh.readlines():
             firstChar = l[0]
-            l.split().pop(0)
+            list = l.split()
+            list.pop(0)
             if firstChar == 'T':
-                for elem in l:
-                    elem.split(',')
+                for elem in list:
                     T.append(self.Timetable_slot(elem[0], elem[1]))
 
             elif firstChar == 'R':
-                R = l
+                R = list
             elif firstChar == 'S':
-                S = l
+                S = list
             elif firstChar == 'W':
-                for elem in l:
+                for elem in list:
                     elem.split(',')
                     W.append(self.Weekly_class(elem[0], elem[1], elem[2]))
             elif firstChar == 'A':
-                for elem in l:
+                for elem in list:
                     elem.split(',')
                     Assoc.append(self.Association(elem[0], elem[1]))
             else:
