@@ -58,35 +58,28 @@ class Problem(csp.CSP):
             domains[var] = TR
 
         neighbors = {}
-#        for w1 in W:
-#            for w2 in W:
-#                print(w1)
-#                if w1 != w2:
-#                    if w2 not in neighbors[w1]:
-#                        neighbors[w1].append(w2)
-#                    if w1 not in neighbors[w2]:
-#                        neighbors[w2].append(w1)
 
         for w in W:
             W1 = deepcopy(W)
             W1.remove(w)
             neighbors[w] = W1
 
-        print(neighbors)
         self.solution = {}
 
         super().__init__(variables, domains, neighbors, self.constraints_function)
 
     def constraints_function(self, A, a, B, b):
-        firstConstraint, secondConstraint, thirdConstraint = True
+        firstConstraint = True
+        secondConstraint = True
+        thirdConstraint = True
 
         if (A != B):
             if (a.date == b.date and a.time == b.time):
                 firstConstraint = a.room != b.room
 
-                for studentA, courseA in self.Assoc.items():
+                for studentA, courseA in dict(self.Assoc).items():
                     if courseA == A.course:
-                        for studentB, courseB in self.Assoc.items():
+                        for studentB, courseB in dict(self.Assoc).items():
                             if courseB == B.course:
                                 secondConstraint = secondConstraint and (studentA != studentB)
 
@@ -122,3 +115,6 @@ def solve(input_file, output_file):
 
 
 p = Problem(open("input.txt"))
+
+
+solve(open("input.txt"), open("output.txt"))
