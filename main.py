@@ -16,6 +16,7 @@ class Problem(csp.CSP):
         W = []
         Assoc = []
         TR = []
+        lastestTimeSlot = 0
 
         for l in fh.readlines():
             firstChar = l[0]
@@ -45,10 +46,16 @@ class Problem(csp.CSP):
             for r in R:
                 TR.append(self.Timetable_slot_room(t.date, t.time, r))
 
+        # initialize the lastest timeslot
+        for timeslot in T:
+            if int(timeslot.time) >= int(lastestTimeSlot):
+                lastestTimeSlot = int(timeslot.time)
+
         self.T = T
         self.W = W
         self.Assoc = Assoc
         self.TR = TR
+        self.lastestTimeSlot = lastestTimeSlot
 
         variables = W
         domains = {}
@@ -70,6 +77,7 @@ class Problem(csp.CSP):
         firstConstraint = True
         secondConstraint = True
         thirdConstraint = True
+        fourthConstraint = True
 
         if (A != B):
             if (a.date == b.date and a.time == b.time):
@@ -84,7 +92,9 @@ class Problem(csp.CSP):
         if (A.course == B.course) and (A.kind == B.kind) and (A.index != B.index):
             thirdConstraint = a.date != b.date
 
-        return firstConstraint and secondConstraint and thirdConstraint
+        fourthConstraint = int(a.time) <= self.lastestTimeSlot and int(b.time) <= self.lastestTimeSlot
+
+        return firstConstraint and secondConstraint and thirdConstraint and fourthConstraint
 
     def dump_solution(self, fh):
         for var, value in self.solution.items():
@@ -105,14 +115,23 @@ def solve(input_file, output_file):
     p = Problem(input_file)
     # Place here your code that calls function csp.backtracking_search(self, ...)
 
-    p.solution = csp.backtracking_search(p, csp.first_unassigned_variable,
-                                         csp.unordered_domain_values,
-                                         csp.no_inference)
+    numberIteration = int(p.lastestTimeSlot)
+
+    for i in range(numberIteration):
+        p.lastestTimeSlot = numberIteration - i
+        print(p.lastestTimeSlot)
+        solution = csp.backtracking_search(p, csp.first_unassigned_variable,
+                                             csp.unordered_domain_values,
+                                             csp.no_inference)
+        print(solution)
+        if solution != None:
+            p.solution = solution
+        else:
+            break
+
     # p.function that calls
     p.dump_solution(output_file)
 
-
 p = Problem(open("input.txt"))
-
 
 solve(open("input.txt"), open("output.txt", "w"))
