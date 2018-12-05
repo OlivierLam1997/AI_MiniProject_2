@@ -45,8 +45,6 @@ class Problem(csp.CSP):
             for r in R:
                 TR.append(self.Timetable_slot_room(t.date, t.time, r))
 
-
-
         self.T = T
         self.W = W
         self.Assoc = Assoc
@@ -77,11 +75,11 @@ class Problem(csp.CSP):
             if (a.date == b.date and a.time == b.time):
                 firstConstraint = a.room != b.room
 
-                for studentA, courseA in dict(self.Assoc).items():
-                    if courseA == A.course:
-                        for studentB, courseB in dict(self.Assoc).items():
-                            if courseB == B.course:
-                                secondConstraint = secondConstraint and (studentA != studentB)
+                for assocA in self.Assoc:
+                    if assocA[1] == A.course:
+                        for assocB in self.Assoc:
+                            if assocB[1] == B.course:
+                                secondConstraint = assocA[0] != assocB[0]
 
         if (A.course == B.course) and (A.kind == B.kind) and (A.index != B.index):
             thirdConstraint = a.date != b.date
@@ -89,16 +87,16 @@ class Problem(csp.CSP):
         return firstConstraint and secondConstraint and thirdConstraint
 
     def dump_solution(self, fh):
-        for s in self.solution:
+        for var, value in self.solution.items():
             fh.write(
-                s.c + ',' + s.t + ',' + s.i + ' ' + self.solution[s].d + ',' + self.solution[s].t + ' ' + self.solution[
-                    s].r + '\n')
+                var.course + ',' + var.kind + ',' + var.index + ' ' + value.date + ',' + value.time + ' ' + value.room + '\n')
 
     def cost_function(self):
-        sum = 0
-        for s in self.solution:
-            sum += self.solution[s].time
-        return sum
+        latestTime = 0
+        for var, value in self.solution.items():
+            if value.time >= latestTime:
+                latestTime = value.time
+        return latestTime
 
 
 # def function(self,): function that calls csp.backtraking
@@ -117,4 +115,4 @@ def solve(input_file, output_file):
 p = Problem(open("input.txt"))
 
 
-solve(open("input.txt"), open("output.txt"))
+solve(open("input.txt"), open("output.txt", "w"))
