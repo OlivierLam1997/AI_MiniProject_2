@@ -77,8 +77,8 @@ class Problem(csp.CSP):
 
         constraint = True
 
-        if (A != B):
-            if (a.date == b.date and a.time == b.time):
+        if A != B:
+            if a.date == b.date and a.time == b.time:
                 constraint = a.room != b.room and constraint
 
                 for assocA in self.Assoc:
@@ -92,8 +92,6 @@ class Problem(csp.CSP):
             constraint = a.date != b.date and constraint
 
         constraint = constraint and int(a.time) <= self.lastestTimeSlot and int(b.time) <= self.lastestTimeSlot
-
-#        print(A, a, B, b, constraint)
         return constraint
 
     def dump_solution(self, fh):
@@ -110,12 +108,11 @@ class Problem(csp.CSP):
 
     def cspBacktrack(self, p):
         numberIteration = int(p.lastestTimeSlot)
-        index = 0
 
         for i in range(numberIteration):
             p1 = deepcopy(p)
             p1.lastestTimeSlot = numberIteration - i
-            p1.solution = csp.backtracking_search(p1, csp.mrv, csp.lcv, csp.forward_checking)
+            p1.solution = csp.backtracking_search(p1, csp.first_unassigned_variable, csp.lcv, csp.forward_checking)
             if p1.solution != None:
                 p.solution = p1.solution
             else:
@@ -126,9 +123,8 @@ class Problem(csp.CSP):
 def solve(input_file, output_file):
     p = Problem(input_file)
     # Place here your code that calls function csp.backtracking_search(self, ...)
-
     p.cspBacktrack(p).dump_solution(output_file)
 
-p = Problem(open("input.txt"))
 
+p = Problem(open("input.txt"))
 solve(open("input.txt"), open("output.txt", "w"))
