@@ -112,7 +112,7 @@ class Problem(csp.CSP):
         for i in range(numberIteration):
             p1 = deepcopy(p)
             p1.lastestTimeSlot = numberIteration - i
-            p1.solution = csp.backtracking_search(p1, csp.first_unassigned_variable, csp.lcv, csp.forward_checking)
+            p1.solution = csp.backtracking_search(p1, csp.mrv, csp.lcv, csp.forward_checking)
             if p1.solution != None:
                 p.solution = p1.solution
             else:
