@@ -58,6 +58,7 @@ class Problem(csp.CSP):
         self.lastestTimeSlot = lastestTimeSlot
 
         variables = W
+
         domains = {}
         for var in variables:
             domains[var] = TR
@@ -98,13 +99,6 @@ class Problem(csp.CSP):
         for var, value in self.solution.items():
             fh.write(
                 var.course + ',' + var.kind + ',' + var.index + ' ' + value.date + ',' + value.time + ' ' + value.room + '\n')
-
-    def cost_function(self):
-        latestTime = 0
-        for var, value in self.solution.items():
-            if value.time >= latestTime:
-                latestTime = value.time
-        return latestTime
 
     def cspBacktrack(self, p):
         numberIteration = int(p.lastestTimeSlot)
