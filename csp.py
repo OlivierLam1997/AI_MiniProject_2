@@ -192,6 +192,7 @@ def revise(csp, Xi, Xj, removals):
 
 def first_unassigned_variable(assignment, csp):
     """The default variable order."""
+    print(assignment)
     return first([var for var in csp.variables if var not in assignment])
 
 
@@ -259,10 +260,10 @@ def backtracking_search(csp,
     """[Figure 6.5]"""
 
     def backtrack(assignment):
+        print(assignment)
         if len(assignment) == len(csp.variables):
             return assignment
         var = select_unassigned_variable(assignment, csp)
-        print(var)
         for value in order_domain_values(var, assignment, csp):
             if 0 == csp.nconflicts(var, value, assignment):
                 csp.assign(var, value, assignment)

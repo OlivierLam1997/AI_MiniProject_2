@@ -108,20 +108,19 @@ class Problem(csp.CSP):
                 latestTime = value.time
         return latestTime
 
-# def function(self,): function that calls csp.backtraking
-
     def cspBacktrack(self, p):
         numberIteration = int(p.lastestTimeSlot)
+        index = 0
 
         for i in range(numberIteration):
             p1 = deepcopy(p)
             p1.lastestTimeSlot = numberIteration - i
-            p.solution = csp.backtracking_search(p1, csp.mrv, csp.lcv, csp.forward_checking)
-
-            if p.solution == None:
+            p1.solution = csp.backtracking_search(p1, csp.mrv, csp.lcv, csp.forward_checking)
+            if p1.solution != None:
+                p.solution = p1.solution
+            else:
                 break
         return p
-
 
 
 def solve(input_file, output_file):
