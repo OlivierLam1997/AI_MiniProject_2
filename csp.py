@@ -262,6 +262,7 @@ def backtracking_search(csp,
         if len(assignment) == len(csp.variables):
             return assignment
         var = select_unassigned_variable(assignment, csp)
+        print(var)
         for value in order_domain_values(var, assignment, csp):
             if 0 == csp.nconflicts(var, value, assignment):
                 csp.assign(var, value, assignment)

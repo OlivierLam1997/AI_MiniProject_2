@@ -74,27 +74,27 @@ class Problem(csp.CSP):
         super().__init__(variables, domains, neighbors, self.constraints_function)
 
     def constraints_function(self, A, a, B, b):
-        firstConstraint = True
-        secondConstraint = True
-        thirdConstraint = True
-        fourthConstraint = True
+
+        constraint = True
 
         if (A != B):
             if (a.date == b.date and a.time == b.time):
-                firstConstraint = a.room != b.room
+                constraint = a.room != b.room and constraint
 
                 for assocA in self.Assoc:
                     if assocA[1] == A.course:
                         for assocB in self.Assoc:
                             if assocB[1] == B.course:
-                                secondConstraint = assocA[0] != assocB[0]
+
+                                constraint = constraint and assocA[0] != assocB[0]
 
         if (A.course == B.course) and (A.kind == B.kind) and (A.index != B.index):
-            thirdConstraint = a.date != b.date
+            constraint = a.date != b.date and constraint
 
-        fourthConstraint = int(a.time) <= self.lastestTimeSlot and int(b.time) <= self.lastestTimeSlot
+        constraint = constraint and int(a.time) <= self.lastestTimeSlot and int(b.time) <= self.lastestTimeSlot
 
-        return firstConstraint and secondConstraint and thirdConstraint and fourthConstraint
+#        print(A, a, B, b, constraint)
+        return constraint
 
     def dump_solution(self, fh):
         for var, value in self.solution.items():
@@ -108,29 +108,27 @@ class Problem(csp.CSP):
                 latestTime = value.time
         return latestTime
 
-
 # def function(self,): function that calls csp.backtraking
+
+    def cspBacktrack(self, p):
+        numberIteration = int(p.lastestTimeSlot)
+
+        for i in range(numberIteration):
+            p1 = deepcopy(p)
+            p1.lastestTimeSlot = numberIteration - i
+            p.solution = csp.backtracking_search(p1, csp.mrv, csp.lcv, csp.forward_checking)
+
+            if p.solution == None:
+                break
+        return p
+
+
 
 def solve(input_file, output_file):
     p = Problem(input_file)
     # Place here your code that calls function csp.backtracking_search(self, ...)
 
-    numberIteration = int(p.lastestTimeSlot)
-
-    for i in range(numberIteration):
-        p.lastestTimeSlot = numberIteration - i
-        print(p.lastestTimeSlot)
-        solution = csp.backtracking_search(p, csp.first_unassigned_variable,
-                                             csp.unordered_domain_values,
-                                             csp.no_inference)
-        print(solution)
-        if solution != None:
-            p.solution = solution
-        else:
-            break
-
-    # p.function that calls
-    p.dump_solution(output_file)
+    p.cspBacktrack(p).dump_solution(output_file)
 
 p = Problem(open("input.txt"))
 
